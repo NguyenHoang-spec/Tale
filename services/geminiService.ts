@@ -50,11 +50,11 @@ class GeminiService {
     } catch (e) {
       console.error("Failed to load API keys", e);
     }
-  this.apiKeys = import.meta.env.VITE_GEMINI_API_KEY ? [import.meta.env.VITE_GEMINI_API_KEY] : [];
+    this.apiKeys = process.env.API_KEY ? [process.env.API_KEY] : [];
   }
 
   private getCurrentKey(): string {
-   if (this.apiKeys.length === 0) return import.meta.env.VITE_GEMINI_API_KEY || '';
+    if (this.apiKeys.length === 0) return process.env.API_KEY || '';
     return this.apiKeys[this.currentKeyIndex];
   }
 
