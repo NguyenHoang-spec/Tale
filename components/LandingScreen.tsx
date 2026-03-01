@@ -59,7 +59,7 @@ const TECH_SPECS = [
 
 const UPDATE_LOGS = [
     {
-        version: "v5.1 -Hoàng Đẹp Trai",
+        version: "v5.1 -Gemini 3.1 Pro",
         date: "Mới nhất",
         author: "Nguyễn Hoàng",
         details: [
