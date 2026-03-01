@@ -59,13 +59,11 @@ const TECH_SPECS = [
 
 const UPDATE_LOGS = [
     {
-        version: "v5.1 -Hoàng Đẹp Trai",
+        version: "v5.1 -Gemini 3.1 Pro",
         date: "Mới nhất",
         author: "Nguyễn Hoàng",
         details: [
-            "PRONOUN MIRRORING (Giao Thức Soi Gương): AI hiện tại sẽ tự động 'soi gương' cách xưng hô của người chơi ngay lập tức. Nếu bạn xưng 'Tớ/Cậu', AI sẽ dùng lại 'Tớ/Cậu'. Nếu bạn dùng 'Mẹ/Con' hay 'Chị/Em', AI cũng sẽ tuân theo thay vì dùng từ mặc định.",
-            "CUSTOM LOGO: Thêm nút 'Đặt Logo' trong Kho Ảnh (Gallery). Giờ đây bạn có thể đổi biểu tượng Rồng mặc định thành bất kỳ ảnh nào bạn thích.",
-            "WIKI DETAIL BOOST: Cải thiện logic lưu trữ Wiki, đảm bảo thông tin được ghi chép cực kỳ chi tiết (500 chữ) để phục vụ cốt truyện lâu dài."
+            "Update Gemini 3.1 Pro.",
         ]
     },
     {
@@ -1068,7 +1066,7 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onNewGame, onLoadG
                <div className="absolute inset-0 bg-gold-500/20 rounded-full blur-xl group-hover:blur-2xl transition-all duration-700 animate-pulse-slow"></div>
                <img 
                  src={globalLogoUrl} 
-                 alt="Nhập Vai Logo" 
+                 alt="TAlE LOGO" 
                  className="w-full h-full object-contain relative z-10 drop-shadow-[0_0_25px_rgba(234,179,8,0.4)]"
                />
                <div className="absolute -bottom-2 right-0 bg-ink-900 text-gold-500 text-[10px] p-1 rounded-full border border-gold-500/50 opacity-0 group-hover:opacity-100 transition-opacity z-20">
@@ -1077,7 +1075,7 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onNewGame, onLoadG
             </div>
 
             <h1 className="text-5xl md:text-7xl font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-gold-300 via-parchment-100 to-spirit-300 drop-shadow-[0_0_25px_rgba(234,179,8,0.3)] pb-2">
-              Hoàng Đẹp Trai
+              Infinity Tale
             </h1>
             <h2 className="text-2xl md:text-3xl font-display text-gold-500/80 tracking-[0.4em] uppercase font-light border-t border-b border-gold-500/30 py-3 relative inline-block">
               <span className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-gold-500 rotate-45"></span>
@@ -1087,12 +1085,12 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onNewGame, onLoadG
 
             {/* VERSION DISPLAY */}
             <div className="text-3xl md:text-4xl font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-jade-400 via-spirit-400 to-arcane-400 mt-2 mb-4 drop-shadow-lg animate-pulse-slow tracking-wider cursor-pointer hover:scale-105 transition-transform" onClick={() => setShowUpdatesModal(true)}>
-                v5.1 - Hoàng Đẹp Trai
+                v5.1 - Infinity Tale
             </div>
 
             {/* NEW CREDIT LINE */}
             <div className="mt-2 text-xl md:text-3xl font-bold text-gold-400 font-display drop-shadow-[0_0_15px_rgba(234,179,8,0.6)] animate-pulse">
-                Cre:  Phát Triển Thêm: Nguyễn Hoàng
+                Phát Triển: Nguyễn Hoàng - Cre; Zesty
             </div>
         </div>
 
@@ -1166,7 +1164,7 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onNewGame, onLoadG
         <div className="text-[10px] text-ink-500 uppercase tracking-widest font-bold flex flex-wrap justify-center gap-4 mt-auto">
            <span>v5.1 Pronoun Sync</span>
            <span className="text-gold-500/50 hidden md:inline">•</span>
-           <span>Powered by Gemini 3.0</span>
+           <span>Powered by Gemini 3.1</span>
         </div>
       </div>
 
@@ -1177,7 +1175,7 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onNewGame, onLoadG
              {/* Header */}
              <div className="p-6 border-b border-white/10 bg-ink-950/50 flex justify-between items-center">
                  <h3 className="text-xl font-display font-bold text-arcane-400 flex items-center gap-2">
-                     <i className="fas fa-book-journal-whills"></i> Thư Viện Thiên Mệnh
+                     <i className="fas fa-book-journal-whills"></i> Tiếp Tục Hành Trình
                  </h3>
                  <button onClick={() => setShowLibrary(false)} className="text-ink-500 hover:text-white"><i className="fas fa-times"></i></button>
              </div>
