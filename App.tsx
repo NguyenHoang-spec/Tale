@@ -509,51 +509,56 @@ function App() {
 
       // --- STEP 3: ARCHIVIST (TẠO WIKI) - BACKGROUND PROCESS (ONLY FROM TURN 2) ---
       if (currentSession.mechanics?.autoCodex && turnIndex > 0) {
-          // 1. Chạy ngầm tạo Wiki
-          geminiService.runGameSystem(
-              parsed.narrative,
-              currentSession.worldSettings
-          ).then(async (systemResult) => {
-               if (systemResult.newRegistry && systemResult.newRegistry.length > 0) {
-                  const wikiData = systemResult.newRegistry;
-                  const validRegistry = wikiData.filter((entry: any) => 
-                      entry && typeof entry.name === 'string' && entry.name.trim().length > 0 && entry.name.toLowerCase() !== 'unknown'
-                  );
-
-                  if (validRegistry.length > 0) {
-                      const entriesToUpsert = await Promise.all(validRegistry.map(async (entry: any) => {
-                          const normalizedName = entry.name.trim();
-                          let vector: number[] = [];
-                          try { 
-                              const textToEmbed = `${normalizedName} (${entry.type}): ${entry.description}`;
-                              vector = await geminiService.embedText(textToEmbed); 
-                          } catch (err) { 
-                              console.warn(`Failed to embed wiki entry: ${entry.name}`, err); 
-                          }
-
-                          return {
-                              ...entry,
-                              name: normalizedName,
-                              type: entry.type || 'KNOWLEDGE',
-                              description: entry.description,
-                              sessionId: currentSession.id!,
-                              firstSeenTurn: turnIndex + 1,
-                              embedding: vector
-                          } as RegistryEntry;
-                      }));
-                      
-                      await db.upsertWikiEntries(currentSession.id!, entriesToUpsert, turnIndex + 1);
-                      console.log("Wiki updated with", entriesToUpsert.length, "entries.");
+          // DELAY 3 GIÂY TRƯỚC KHI CHẠY NGẦM ĐỂ TRÁNH SPAM API CÙNG LÚC
+          setTimeout(() => {
+              // 1. Chạy ngầm tạo Wiki
+              geminiService.runGameSystem(
+                  parsed.narrative,
+                  currentSession.worldSettings
+              ).then(async (systemResult) => {
+                   if (systemResult.newRegistry && systemResult.newRegistry.length > 0) {
+                      const wikiData = systemResult.newRegistry;
+                      const validRegistry = wikiData.filter((entry: any) => 
+                          entry && typeof entry.name === 'string' && entry.name.trim().length > 0 && entry.name.toLowerCase() !== 'unknown'
+                      );
+    
+                      if (validRegistry.length > 0) {
+                          const entriesToUpsert = await Promise.all(validRegistry.map(async (entry: any) => {
+                              const normalizedName = entry.name.trim();
+                              let vector: number[] = [];
+                              try { 
+                                  const textToEmbed = `${normalizedName} (${entry.type}): ${entry.description}`;
+                                  vector = await geminiService.embedText(textToEmbed); 
+                              } catch (err) { 
+                                  console.warn(`Failed to embed wiki entry: ${entry.name}`, err); 
+                              }
+    
+                              return {
+                                  ...entry,
+                                  name: normalizedName,
+                                  type: entry.type || 'KNOWLEDGE',
+                                  description: entry.description,
+                                  sessionId: currentSession.id!,
+                                  firstSeenTurn: turnIndex + 1,
+                                  embedding: vector
+                              } as RegistryEntry;
+                          }));
+                          
+                          await db.upsertWikiEntries(currentSession.id!, entriesToUpsert, turnIndex + 1);
+                          console.log("Wiki updated with", entriesToUpsert.length, "entries.");
+                      }
                   }
-              }
-          });
+              });
+          }, 3000); // Đợi 3s sau khi Storyteller chạy xong
 
           // 2. Chạy ngầm trích xuất Sự kiện/Lịch hẹn (Active Memory)
-          eventService.extractAndSaveEvents(
-              currentSession.id!, 
-              `[HÀNH ĐỘNG CỦA TÔI]: ${userPrompt}\n[KẾT QUẢ]: ${parsed.narrative}`, 
-              newTimestamp
-          ).catch(err => console.warn("Lỗi khi chạy ngầm Event Extractor", err));
+          setTimeout(() => {
+              eventService.extractAndSaveEvents(
+                  currentSession.id!, 
+                  `[HÀNH ĐỘNG CỦA TÔI]: ${userPrompt}\n[KẾT QUẢ]: ${parsed.narrative}`, 
+                  newTimestamp
+              ).catch(err => console.warn("Lỗi khi chạy ngầm Event Extractor", err));
+          }, 6000); // Đợi 6s để tách biệt hoàn toàn với Archivist
       }
 
       // Check for Automatic Summarization (Keep existing)
