@@ -59,11 +59,14 @@ const TECH_SPECS = [
 
 const UPDATE_LOGS = [
     {
-        version: "v5.1 -Gemini 3.1 Pro",
-        date: "Mới nhất",
+         version: "v5.0 - Smart Wiki & Gallery",
+        date: "2024",
         author: "Nguyễn Hoàng",
         details: [
-            "Update Gemini 3.1 Pro.",
+            "AI AUTO-FILL WIKI: Tính năng mới cho phép AI tự động viết thông tin chi tiết cho mục Wiki. Chỉ cần nhập tên, AI sẽ điền mô tả, ngoại hình, tính cách dựa trên cốt truyện.",
+            "KHO ẢNH (GALLERY): Hệ thống quản lý hình nền mới. Lưu trữ ảnh yêu thích, tải ảnh từ URL và đổi hình nền nhanh chóng ngay trong game.",
+            "SAVE CURRENT BG: Cho phép lưu nhanh ảnh nền hiện tại vào Kho Ảnh để dùng lại sau.",
+            "GIAO DIỆN MỚI: Cải tiến modal Giao Diện với các tab riêng biệt cho Cài Đặt và Kho Ảnh."
         ]
     },
     {
