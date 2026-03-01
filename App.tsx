@@ -89,7 +89,7 @@ function App() {
       eventFrequency: 'medium',
       mechanics: mechanics,
       // DEFAULT MODEL IS PRO IF NOT SET
-      aiModel: basicInfo.aiModel || 'gemini-3-pro-preview',
+      aiModel: basicInfo.aiModel || 'gemini-3.1-pro-preview',
       memoryDepth: basicInfo.memoryDepth // USE MEMORY SETTING
     };
     
