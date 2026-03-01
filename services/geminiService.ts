@@ -50,11 +50,11 @@ class GeminiService {
     } catch (e) {
       console.error("Failed to load API keys", e);
     }
-    this.apiKeys = process.env.API_KEY ? [process.env.API_KEY] : [];
+  this.apiKeys = import.meta.env.VITE_GEMINI_API_KEY ? [import.meta.env.VITE_GEMINI_API_KEY] : [];
   }
 
   private getCurrentKey(): string {
-    if (this.apiKeys.length === 0) return process.env.API_KEY || '';
+   if (this.apiKeys.length === 0) return import.meta.env.VITE_GEMINI_API_KEY || '';
     return this.apiKeys[this.currentKeyIndex];
   }
 
@@ -88,7 +88,8 @@ class GeminiService {
     this.ai = new GoogleGenAI({ apiKey: currentKey });
     localStorage.setItem('td_active_api_key', currentKey);
 
-    const maxRetries = Math.max(1, this.apiKeys.length);
+    // Tăng số lần thử lại để cứu vãn khi bị Rate Limit
+    const maxRetries = Math.max(3, this.apiKeys.length * 2);
     let attempts = 0;
     let lastError: any;
 
@@ -107,16 +108,24 @@ class GeminiService {
         const status = error?.status;
         
         // Check for rate limits, quota, or server errors
-        const isRotatableError = 
-            status === 429 || status === 403 || status === 503 || status === 500 ||
-            errorMessage.includes('429') || errorMessage.includes('403') || 
-            errorMessage.includes('quota') || errorMessage.includes('exhausted') ||
-            errorMessage.includes('overloaded');
+        const isRateLimit = status === 429 || errorMessage.includes('429') || errorMessage.includes('quota') || errorMessage.includes('exhausted');
+        const isRotatableError = isRateLimit || status === 403 || status === 503 || status === 500 || errorMessage.includes('overloaded');
 
-        if (isRotatableError && this.apiKeys.length > 1 && attempts < maxRetries) {
-          this.rotateKey();
-          // Small delay before retry
-          await new Promise(resolve => setTimeout(resolve, 1000));
+        if (isRotatableError && attempts < maxRetries) {
+          if (this.apiKeys.length > 1) {
+             this.rotateKey();
+          }
+          
+          // THÊM DELAY (EXPONENTIAL BACKOFF) ĐỂ TRÁNH SPAM SERVER
+          let delay = Math.min(2000 * Math.pow(2, attempts - 1), 15000); // 2s, 4s, 8s, 15s...
+          
+          // Nếu chỉ có 1 Key mà bị 429, BẮT BUỘC phải đợi lâu hơn (15 giây) để API hồi lại
+          if (isRateLimit && this.apiKeys.length <= 1) {
+              delay = 15000; 
+              console.log(`[Rate Limit] Chỉ có 1 Key. Đang đợi ${delay/1000}s để Google hồi Token...`);
+          }
+          
+          await new Promise(resolve => setTimeout(resolve, delay));
           continue;
         }
         
@@ -410,7 +419,9 @@ class GeminiService {
     };
 
     try {
-      const recentHistory = history.slice(-20);
+      // GIẢM LỊCH SỬ XUỐNG ĐỂ TIẾT KIỆM TOKEN (Tránh lỗi 429 và đứt gãy JSON)
+      // Thay vì gửi 20 lượt (rất dễ vượt 32k token), chỉ gửi 6 lượt gần nhất
+      const recentHistory = history.slice(-6);
 
       const contents = recentHistory.map(t => ({
         role: t.role,
