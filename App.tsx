@@ -359,18 +359,22 @@ function App() {
       let timePassed = 0;
       let calculatedTime = baseTime;
       
-      try {
-          // Always run Chronos to calculate time, even on initialization
-          const chronosResult = await geminiService.calculateTime(
-              calculatedTime,
-              userPrompt,
-              currentSession.genre,
-              currentSession.worldSettings.worldContext
-          );
-          timePassed = chronosResult.timePassed;
-          calculatedTime = chronosResult.currentTime;
-      } catch (chronoErr) {
-          console.error("Chronos failed, falling back to old time", chronoErr);
+      // TỐI ƯU HÓA: Bỏ qua Chronos ở Turn đầu tiên (Khởi tạo) để tránh gọi API thừa thãi gây chậm/lỗi 429
+      if (history.length > 0) {
+          try {
+              const chronosResult = await geminiService.calculateTime(
+                  calculatedTime,
+                  userPrompt,
+                  currentSession.genre,
+                  currentSession.worldSettings.worldContext
+              );
+              timePassed = chronosResult.timePassed;
+              calculatedTime = chronosResult.currentTime;
+          } catch (chronoErr) {
+              console.error("Chronos failed, falling back to old time", chronoErr);
+          }
+      } else {
+          calculatedTime = "Ngày 1 - 08:00 - Sáng"; // Mặc định khi mới tạo thế giới
       }
 
       // --- RAG: LOCAL EMBEDDING & RETRIEVAL (ONLY FROM TURN 2) ---
@@ -407,10 +411,13 @@ function App() {
       const newTimestamp = previousTimestamp + timePassed;
 
       let eventTriggerString = "";
-      try {
-          eventTriggerString = await eventService.checkAndGetTriggerPrompt(currentSession.id!, newTimestamp);
-      } catch (err) {
-          console.warn("Failed to check events", err);
+      // TỐI ƯU HÓA: Bỏ qua kiểm tra sự kiện ở Turn đầu tiên
+      if (history.length > 0) {
+          try {
+              eventTriggerString = await eventService.checkAndGetTriggerPrompt(currentSession.id!, newTimestamp);
+          } catch (err) {
+              console.warn("Failed to check events", err);
+          }
       }
 
       // Inject Time Command, RAG Context, and Event Trigger into User Prompt for Storyteller
@@ -459,32 +466,24 @@ function App() {
       const currentLocationName = parsed.stats.currentLocation || parsed.stats.mapData?.locationName || currentStats?.currentLocation || "Không rõ";
       if (!parsed.stats.currentLocation) parsed.stats.currentLocation = currentLocationName;
 
-      // Generate Embedding for the narrative (for future RAG)
-      let embedding: number[] = [];
-      try {
-          embedding = await geminiService.embedText(parsed.narrative);
-      } catch (embErr) {
-          console.warn("Failed to generate embedding for turn, continuing...", embErr);
-      }
-
       // Re-serialize for DB storage (now including the computed time)
       const finalRawJSON = JSON.stringify(parsed);
 
-      // Create Model Turn
+      // Create Model Turn (Tạm thời để embedding rỗng để UI cập nhật ngay lập tức)
       const modelTurn: Turn = {
         sessionId: currentSession.id!,
         turnIndex: turnIndex + 1,
         role: 'model',
         narrative: parsed.narrative,
         rawResponseJSON: finalRawJSON, 
-        embedding: embedding,
+        embedding: [], // Sẽ cập nhật ngầm sau
         thoughtSignature: thoughtSignature
       };
 
       // Save Model Turn
-      await db.turns.add(modelTurn);
+      const newTurnId = await db.turns.add(modelTurn);
 
-      // Update UI
+      // Update UI NGAY LẬP TỨC
       const finalHistory = [...updatedHistory, modelTurn];
       setTurns(finalHistory);
       
@@ -506,6 +505,13 @@ function App() {
       });
       
       setCurrentOptions(parsed.options);
+
+      // CHẠY NGẦM: Tạo Embedding cho lượt này (Không block UI)
+      geminiService.embedText(parsed.narrative).then(async (emb) => {
+          if (emb && emb.length > 0) {
+              await db.turns.update(newTurnId, { embedding: emb });
+          }
+      }).catch(embErr => console.warn("Lỗi chạy ngầm embedding:", embErr));
 
       // --- STEP 3: ARCHIVIST (TẠO WIKI) - BACKGROUND PROCESS (ONLY FROM TURN 2) ---
       if (currentSession.mechanics?.autoCodex && turnIndex > 0) {
