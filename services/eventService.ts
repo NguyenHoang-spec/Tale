@@ -8,7 +8,7 @@ class EventService {
     private ai: GoogleGenAI;
 
     constructor() {
-        this.ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+        this.ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
     }
 
     // 1. CHẠY NGẦM: Trích xuất sự kiện từ câu chuyện và lưu vào Database
