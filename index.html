@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nhập Vai Simulator v5.1 - Zesty</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts: Playfair Display (Display) & Merriweather (Body) + New Fonts for Customization -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Roboto:ital,wght@0,400;0,500;0,700;1,400&family=Source+Code+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              // Deep Space / Midnight Palette (Darker, richer bases)
+              ink: {
+                950: '#020617', // Deepest background
+                900: '#0f172a', // Card background (Deep Blue)
+                800: '#1e293b', // Lighter background
+                700: '#334155', // Borders
+                600: '#475569', // Muted text
+              },
+              // Text colors - Warm off-whites
+              parchment: {
+                100: '#fffbeb', // Warmer white
+                200: '#fef3c7', // Pale yellow-white
+                300: '#e2e8f0', // Cool gray for contrast
+                400: '#94a3b8',
+              },
+              // "Spirit" - Vivid Cyan/Electric Blue (Qi/Magic)
+              spirit: {
+                50: '#ecfeff',
+                100: '#cffafe',
+                200: '#a5f3fc',
+                300: '#67e8f9',
+                400: '#22d3ee',
+                500: '#06b6d4', // Main Neon Cyan
+                600: '#0891b2',
+                700: '#0e7490',
+                800: '#155e75',
+                900: '#164e63',
+              },
+              // "Arcane" - Vivid Violet/Neon Purple (Mystery/Dao)
+              arcane: {
+                300: '#d8b4fe',
+                400: '#c084fc',
+                500: '#a855f7', // Main Neon Purple
+                600: '#9333ea',
+                700: '#7e22ce',
+                900: '#581c87',
+              },
+              // "Gold" - Vivid Amber/Gold (Royalty/Divine/Success)
+              gold: {
+                100: '#fef9c3',
+                200: '#fde047',
+                300: '#facc15',
+                400: '#eab308',
+                500: '#e1b303', // Rich Gold
+                600: '#ca8a04',
+                700: '#a16207',
+                800: '#854d0e',
+                900: '#713f12',
+              },
+              // "Crimson" - Vivid Red/Pink (Danger/Combat/Risk)
+              crimson: {
+                400: '#fb7185',
+                500: '#f43f5e', // Neon Rose
+                600: '#e11d48',
+                700: '#be123c',
+                900: '#881337',
+              },
+              // "Jade" - Vivid Green (Safety/Growth)
+              jade: {
+                400: '#4ade80',
+                500: '#22c55e', // Neon Green
+                600: '#16a34a',
+                900: '#064e3b',
+              }
+            },
+            fontFamily: {
+              serif: ['Merriweather', 'serif'],
+              display: ['Playfair Display', 'serif'], 
+              sans: ['Roboto', 'sans-serif'],
+              mono: ['Source Code Pro', 'monospace'],
+              cursive: ['Dancing Script', 'cursive'],
+            },
+            animation: {
+              'fade-in': 'fadeIn 0.6s ease-out forwards',
+              'slide-up': 'slideUp 0.4s ease-out forwards',
+              'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'float': 'float 6s ease-in-out infinite',
+              'spin-slow': 'spin 12s linear infinite',
+              'glow': 'glow 2s ease-in-out infinite alternate',
+              'shimmer': 'shimmer 3s linear infinite',
+              'page-enter': 'pageEnter 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards',
+            },
+            keyframes: {
+              fadeIn: {
+                '0%': { opacity: '0' },
+                '100%': { opacity: '1' },
+              },
+              slideUp: {
+                '0%': { transform: 'translateY(20px)', opacity: '0' },
+                '100%': { transform: 'translateY(0)', opacity: '1' },
+              },
+              float: {
+                '0%, 100%': { transform: 'translateY(0)' },
+                '50%': { transform: 'translateY(-10px)' },
+              },
+              glow: {
+                '0%': { boxShadow: '0 0 5px rgba(6, 182, 212, 0.2)' },
+                '100%': { boxShadow: '0 0 20px rgba(6, 182, 212, 0.6), 0 0 10px rgba(6, 182, 212, 0.4)' }
+              },
+              shimmer: {
+                '0%': { backgroundPosition: '200% 0' },
+                '100%': { backgroundPosition: '-200% 0' }
+              },
+              pageEnter: {
+                '0%': { opacity: '0', transform: 'translateY(15px) scale(0.98)' },
+                '100%': { opacity: '1', transform: 'translateY(0) scale(1)' }
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        /* Nebula Gradient: Deep Navy -> Purple -> Black */
+        background: radial-gradient(circle at 50% -20%, #2e1065 0%, #1e1b4b 30%, #020617 80%);
+        background-attachment: fixed;
+        color: #e2e8f0;
+        font-family: 'Merriweather', serif;
+        min-height: 100vh;
+        -webkit-font-smoothing: antialiased;
+      }
+      
+      p {
+        margin-bottom: 1.25em;
+        line-height: 1.8;
+      }
+
+      /* Custom scrollbar - Auto hide on inactive */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent; 
+      }
+      /* Default state: Transparent/Hidden */
+      ::-webkit-scrollbar-thumb {
+        background: transparent; 
+        border-radius: 3px;
+        transition: background-color 0.2s;
+      }
+      /* Show on Hover of the container */
+      *:hover::-webkit-scrollbar-thumb {
+        background: rgba(51, 65, 85, 0.5); /* ink-700 with opacity */
+      }
+      /* Active Hover on Thumb */
+      ::-webkit-scrollbar-thumb:hover {
+        background: #eab308 !important; /* Gold Hover */
+      }
+
+      /* Glassmorphism utilities */
+      .glass {
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(234, 179, 8, 0.1); /* Gold tint border */
+      }
+      
+      .glass-panel {
+        background: rgba(2, 6, 23, 0.5);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      .text-glow {
+        text-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+      }
+      .text-glow-gold {
+        text-shadow: 0 0 15px rgba(234, 179, 8, 0.6);
+      }
+      .text-glow-crimson {
+        text-shadow: 0 0 15px rgba(244, 63, 94, 0.6);
+      }
+      .text-glow-purple {
+        text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+      }
+      
+      .prose-content {
+        font-size: 1.05rem;
+        /* Color and Font Family will be controlled by inline styles in GameUI */
+      }
+      @media (min-width: 768px) {
+        .prose-content {
+          font-size: 1.125rem;
+        }
+      }
+
+      /* Page Enter Helper Class */
+      .page-enter-active {
+        animation: pageEnter 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "dexie": "https://aistudiocdn.com/dexie@^4.2.1",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
+    "react-markdown": "https://esm.sh/react-markdown@^10.1.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
