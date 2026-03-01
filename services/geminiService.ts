@@ -17,8 +17,8 @@ import {
 } from '../types';
 
 const DEFAULT_MODEL = 'gemini-3.1-pro-preview';
-const ARCHIVIST_MODEL = 'gemini-3-flash-preview';
-const CHRONOS_MODEL = 'gemini-3-flash-preview'; // Model nhanh, logic tốt cho việc tính toán
+const ARCHIVIST_MODEL = 'gemini-3.1-pro-preview';
+const CHRONOS_MODEL = 'gemini-3.1-pro-preview'; // Model nhanh, logic tốt cho việc tính toán
 
 const SAFETY_SETTINGS = [
   { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },
