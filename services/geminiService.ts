@@ -16,9 +16,9 @@ import {
   RegistryEntry
 } from '../types';
 
-const DEFAULT_MODEL = 'gemini-3.1-pro-preview';
-const ARCHIVIST_MODEL = 'gemini-3.1-pro-preview';
-const CHRONOS_MODEL = 'gemini-3.1-pro-preview'; // Model nhanh, logic tốt cho việc tính toán
+const DEFAULT_MODEL = 'gemini-2.5-flash';
+const ARCHIVIST_MODEL = 'gemini-2.5-flash';
+const CHRONOS_MODEL = 'gemini-2.5-flash'; // Model nhanh, logic tốt cho việc tính toán
 
 const SAFETY_SETTINGS = [
   { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },
