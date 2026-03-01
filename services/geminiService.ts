@@ -433,9 +433,11 @@ class GeminiService {
         parts: [{ text: userPrompt }]
       });
 
-      // Hybrid Model Routing: Lượt 1 dùng Flash cho nhanh, từ lượt 2 dùng Pro cho thông minh
-      const isFirstTurn = history.length === 0;
-      const selectedModel = isFirstTurn ? 'gemini-3-flash-preview' : (modelName || DEFAULT_MODEL);
+      // Sử dụng đúng Model người chơi đã chọn, KHÔNG tự ý đổi sang Flash ở lượt 1
+      const selectedModel = modelName || DEFAULT_MODEL;
+
+      // Chỉ bật Thinking Mode nếu Model hỗ trợ (dòng Pro)
+      const isProModel = selectedModel.includes('pro');
 
       const response = await this.generateContentWithRetry({
         model: selectedModel,
@@ -448,8 +450,7 @@ class GeminiService {
           safetySettings: SAFETY_SETTINGS as any,
           maxOutputTokens: 8192, 
           stopSequences: ["(End). (End).", "(End).(End)."],
-          // Tắt Thinking Mode ở lượt 1 (Flash) để tối đa tốc độ, bật lại ở lượt 2 (Pro)
-          ...(isFirstTurn ? {} : { thinkingConfig: { thinkingLevel: ThinkingLevel.HIGH } })
+          ...(isProModel ? { thinkingConfig: { thinkingLevel: ThinkingLevel.HIGH } } : {})
         }
       });
 
