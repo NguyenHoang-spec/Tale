@@ -1087,12 +1087,12 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onNewGame, onLoadG
 
             {/* VERSION DISPLAY */}
             <div className="text-3xl md:text-4xl font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-jade-400 via-spirit-400 to-arcane-400 mt-2 mb-4 drop-shadow-lg animate-pulse-slow tracking-wider cursor-pointer hover:scale-105 transition-transform" onClick={() => setShowUpdatesModal(true)}>
-                v5.1 - Hoàng Đẹp Trai
+                v5.1 - The Infinity Tale
             </div>
 
             {/* NEW CREDIT LINE */}
             <div className="mt-2 text-xl md:text-3xl font-bold text-gold-400 font-display drop-shadow-[0_0_15px_rgba(234,179,8,0.6)] animate-pulse">
-                Cre:  Phát Triển Thêm: Nguyễn Hoàng
+                Phát Triển: Nguyễn Hoàng - Cre: Zesty
             </div>
         </div>
 
@@ -1118,7 +1118,7 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onNewGame, onLoadG
              <div className="flex items-center justify-center gap-4">
                <i className="fas fa-book-journal-whills text-arcane-400 group-hover:scale-110 transition-transform text-xl"></i>
                <div className="flex flex-col items-start">
-                   <span className="text-lg font-bold text-parchment-100 group-hover:text-white tracking-wide font-display">Thư Viện Thiên Mệnh</span>
+                   <span className="text-lg font-bold text-parchment-100 group-hover:text-white tracking-wide font-display">Tiếp Tục Hành Trình</span>
                    <span className="text-[10px] text-ink-400 uppercase tracking-widest group-hover:text-arcane-300 transition-colors">Tiếp tục hành trình ({sessions.length})</span>
                </div>
             </div>
@@ -1166,7 +1166,7 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onNewGame, onLoadG
         <div className="text-[10px] text-ink-500 uppercase tracking-widest font-bold flex flex-wrap justify-center gap-4 mt-auto">
            <span>v5.1 Pronoun Sync</span>
            <span className="text-gold-500/50 hidden md:inline">•</span>
-           <span>Powered by Gemini 3.0</span>
+           <span>Powered by Gemini 3.1 Pro</span>
         </div>
       </div>
 
