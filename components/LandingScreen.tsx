@@ -1077,7 +1077,7 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onNewGame, onLoadG
             </div>
 
             <h1 className="text-5xl md:text-7xl font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-gold-300 via-parchment-100 to-spirit-300 drop-shadow-[0_0_25px_rgba(234,179,8,0.3)] pb-2">
-              Hoàng Đẹp Trai
+              The Infinity Tale
             </h1>
             <h2 className="text-2xl md:text-3xl font-display text-gold-500/80 tracking-[0.4em] uppercase font-light border-t border-b border-gold-500/30 py-3 relative inline-block">
               <span className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-gold-500 rotate-45"></span>
@@ -1087,7 +1087,7 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onNewGame, onLoadG
 
             {/* VERSION DISPLAY */}
             <div className="text-3xl md:text-4xl font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-jade-400 via-spirit-400 to-arcane-400 mt-2 mb-4 drop-shadow-lg animate-pulse-slow tracking-wider cursor-pointer hover:scale-105 transition-transform" onClick={() => setShowUpdatesModal(true)}>
-                v5.1 - The Infinity Tale
+                v5.1 - Gemini 3.1 Pro
             </div>
 
             {/* NEW CREDIT LINE */}
